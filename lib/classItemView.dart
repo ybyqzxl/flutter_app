@@ -1,170 +1,15 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyFocusScreen(),
-    );
-  }
-}
-
-class MyFocusScreen extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return MyFocusState();
-  }
-}
-
-class ClassItemModel {
-  String classId;
-  String className;
-  String classTime;
-  String classAddress;
-  String classDate;
-  int classType;
-  String classMajorTeacher;
-  List<String> classTeacher;
-  String classPrice;
-  String followPeople;
-  String classState;
-  bool classChecked;
-
-  ClassItemModel(this.classId,
-      {this.className,
-      this.classTime,
-      this.classAddress,
-      this.classDate,
-      this.classMajorTeacher,
-      this.classType,
-      this.classTeacher,
-      this.classPrice,
-      this.followPeople,
-      this.classState,
-      this.classChecked});
-}
-
-class MyFocusState extends State<MyFocusScreen> {
-  String _menu = "编辑";
-  bool _isShowCheckedAll = true;
-
-  void changeCheckedAll(bool changeChecked) {
-    setState(() {
-//      _isShowCheckedAll = changeChecked;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () => {},
-            padding: EdgeInsets.all(18),
-            icon: Image.asset("assets/icon_back.png"),
-          ),
-          centerTitle: true,
-          elevation: 0,
-          actions: <Widget>[
-            GestureDetector(
-              onTap: () => setState(() {
-                if (_menu == "编辑") {
-                  _isShowCheckedAll = false;
-                  _menu = "完成";
-                } else {
-                  _isShowCheckedAll = true;
-                  _menu = "编辑";
-                }
-                for (var value in classItems) {
-                  value.classChecked = false;
-                }
-              }),
-              child: Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                child: Text(
-                  _menu,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            )
-          ],
-          backgroundColor: Colors.white,
-          title: Text(
-            "关注的班级",
-            style: TextStyle(color: Color(0xff132c4b), fontSize: 18),
-          ),
-        ),
-        body: ContentWidget(_isShowCheckedAll, changeCheckedAll));
-  }
-}
-
-final List<ClassItemModel> classItems = [
-  ClassItemModel("1",
-      className: "双师测试课程",
-      classTime: "周六、周日",
-      classAddress: "海淀黄庄",
-      classDate: "2019-07-08",
-      classMajorTeacher: "周杰伦",
-      classType: 1,
-      classTeacher: ["张三", "李四", "王五", "张三", "李四", "王五", "张三", "李四", "王五"],
-      classPrice: "2000",
-      followPeople: "1",
-      classState: "增开",
-      classChecked: false),
-  ClassItemModel("2",
-      className: "双师测试课程",
-      classTime: "周六、周日",
-      classAddress: "海淀黄庄",
-      classDate: "2019-07-08",
-      classMajorTeacher: "周杰伦",
-      classType: 1,
-      classTeacher: ["张三", "李四", "王五", "张三", "李四", "王五", "张三", "李四", "王五"],
-      classPrice: "2000",
-      followPeople: "1",
-      classState: "增开",
-      classChecked: false),
-  ClassItemModel("3",
-      className: "双师测试课程",
-      classTime: "周六、周日",
-      classAddress: "海淀黄庄",
-      classDate: "2019-07-08",
-      classMajorTeacher: "周杰伦",
-      classType: 1,
-      classTeacher: ["张三", "李四", "王五", "张三", "李四", "王五", "张三", "李四", "王五"],
-      classPrice: "2000",
-      followPeople: "1",
-      classState: "增开",
-      classChecked: false),
-  ClassItemModel("4",
-      className: "双师测试课程",
-      classTime: "周六、周日",
-      classAddress: "海淀黄庄",
-      classDate: "2019-07-08",
-      classMajorTeacher: "周杰伦",
-      classType: 1,
-      classTeacher: ["张三", "李四", "王五", "张三", "李四", "王五", "张三", "李四", "王五"],
-      classPrice: "2000",
-      followPeople: "1",
-      classState: "增开",
-      classChecked: false)
-];
+import 'bean/ClassItemModel.dart';
 
 class ContentWidget extends StatefulWidget {
   final bool _isShowCheckedAll;
 
   final ValueChanged<bool> checkedAllChange;
 
-  ContentWidget(this._isShowCheckedAll, this.checkedAllChange);
+  final List<ClassItemModel> classItems;
+
+  ContentWidget(this.classItems, this._isShowCheckedAll, this.checkedAllChange);
 
   @override
   State<StatefulWidget> createState() {
@@ -179,11 +24,11 @@ class ContentWidgetState extends State<ContentWidget> {
   final List<ClassItemModel> mList = List();
 
   void _isAllChecked() {
-    if (classItems.isEmpty) {
+    if (widget.classItems.isEmpty) {
       return;
     }
     _allChecked = true;
-    for (var value in classItems) {
+    for (var value in widget.classItems) {
       if (!value.classChecked) {
         _allChecked = false;
         break;
@@ -232,12 +77,12 @@ class ContentWidgetState extends State<ContentWidget> {
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
-                      for (var value in classItems) {
+                      for (var value in widget.classItems) {
                         value.classChecked = !_allChecked;
                       }
                       if (!_allChecked) {
                         mList.clear();
-                        mList.addAll(classItems);
+                        mList.addAll(widget.classItems);
                       } else {
                         mList.clear();
                       }
@@ -272,10 +117,11 @@ class ContentWidgetState extends State<ContentWidget> {
             child: ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
-              itemCount: classItems == null ? 0 : classItems.length,
+              itemCount:
+                  widget.classItems == null ? 0 : widget.classItems.length,
               itemBuilder: (BuildContext context, int index) {
                 return ClassCardItemWidget(
-                  model: classItems[index],
+                  model: widget.classItems[index],
                   isShowCheckedAll: widget._isShowCheckedAll,
                   onChecked: _onChecked,
                 );
@@ -289,7 +135,7 @@ class ContentWidgetState extends State<ContentWidget> {
               child: GestureDetector(
                 onTap: () {
                   for (var value in mList) {
-                    classItems.remove(value);
+                    widget.classItems.remove(value);
                   }
                   _isHaveClassChecked = false;
                   mList.clear();

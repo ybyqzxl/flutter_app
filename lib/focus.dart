@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
 }
 
 final List<ClassItemModel> classItems = [
-  ClassItemModel("1",
+  ClassItemModel("1333333333",
       className: "双师测试课程",
       classTime: "周六、周日",
       classAddress: "海淀黄庄",
